@@ -17,7 +17,7 @@
 
   - Mascaramento dos dados
   - Validação de dados com testes unitários
-  - Export dos daddos validados
+  - Export dos dados validados
 
 * **Fluxo de execução**
 
@@ -25,6 +25,9 @@
 
 
 * **Ordem de execução**
+
+* <img width="864" height="224" alt="image" src="https://github.com/user-attachments/assets/6fab9180-f7ae-4f64-a20c-dd5e837defab" />
+
 
   - DADOS_INGESTAO > DADOS_EXTRACAO_TRATAMENTO > DADOS_TESTES_UNITARIOS (Tempo médio: 2 minutos)
 
