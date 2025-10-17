@@ -27,7 +27,8 @@
 * **Ordem de execução**
 
  <img width="864" height="224" alt="image" src="https://github.com/user-attachments/assets/6fab9180-f7ae-4f64-a20c-dd5e837defab" />
-Tempo médio: 2 a 3 minutos
+  
+  Tempo médio: 2 a 3 minutos
 
 * **Opcional**
 
