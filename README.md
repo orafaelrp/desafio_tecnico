@@ -2,7 +2,7 @@
 
 **Descrição**
 
-  Este projeto foi desenvolvido para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Foram gerados dados fictícios para compor as tabelas ASSOCIADO, CONTA e MOVIMENTO. Esses dados foram inseridos em bancos de dados relacionais e não relacionais. Com o ambiente configurado, realizamos a extração dos dados, aplicando tratamento, mascaramento e preparando o objeto final. Esse objeto passa por testes unitários e, quando aprovado, é exportado para um diretório específico nos formatos Delta e Parquet. Todas as senhas utilizadas foram armazenadas no Secrets do próprio Databricks. O processo simula um fluxo real de trabalho, garantindo a qualidade e segurança dos dados manipulados, tanto na base de dados quanto no controle de acesso do usuário.
+  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Com o ambiente configurado, inicia-se a extração dos dados, seguida pelo tratamento, que inclui o mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após ser validado, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. As senhas de conexão com os bancos são mantidas de forma segura no Secrets do Databricks. Dessa forma, o processo simula um fluxo de trabalho real, assegurando a qualidade dos dados e a segurança no acesso às informações.
 
 **Pré-requisitos - Plataformas**
 
@@ -18,18 +18,18 @@
 
 **Funcionalidades**
 
-  - Mascaramento dos dados
+  - Extração e mascaramento dos dados
 
-  - Validação dos dados por meio de testes unitários
+  - Validação do objeto por meio de testes unitários
 
   - Exportação dos dados validados
 
 **Fluxo de execução**
 
-  O fluxo dispara o job 'job_desafio_tecnico' sempre que novos dados fictícios chegam à pasta '/Volumes/workspace/default/desafio_tecnico/'. Os arquivos no formato CSV são lidos e reescritos nas respectivas tabelas e bancos de dados para os quais estão destinados. Após a escrita, realiza-se o mascaramento dos dados, garantindo a segurança da informação. Em seguida, ocorre um join que unifica os dados em um objeto final. Esse objeto passa por testes unitários que validam seus principais aspectos. Estando aprovado, o objeto é então entregue em tabela Delta com o nome "dados_fake.asso_conta_movi", além de ser salvo nos formatos Delta e Parquet no diretório "/Volumes/workspace/default/desafio_tecnico". O job está estruturado para ler esses dados, realizar o tratamento necessário e executar todo o processo automaticamente, garantindo agilidade e robustez sem falhas.
+  Este pipeline é acionado automaticamente mediante detecção de novos arquivos fictícios no diretório montado '/Volumes/workspace/default/desafio_tecnico/'. O job ‘job_desafio_tecnico’ inicia a ingestão dos dados oriundos dos bancos relacional Postgres e MongoDB por meio de conectores específicos. Durante o processamento, aplica-se mascaramento nas colunas classificada como sensíveis, seguido pela realização de uma operação de join entre as bases. A coluna UNIQUE_ID sofre anonimização via função hash MD5 para garantir a irreversibilidade dos dados. O dataset resultante é submetido a um conjunto estruturado de testes unitários automatizados que validam integridade referencial. Uma vez aprovado, os dados são persistidos em uma tabela Delta Lake denominada "dados_fake.asso_conta_movi". Depois o objeto é armazenado nos formatos Delta e Parquet no path físico '/Volumes/workspace/default/desafio_tecnico'.
+  
+**Ordem de execução**
 
-**Ordem de execução
-**
   <img width="864" height="224" alt="image" src="https://github.com/user-attachments/assets/6fab9180-f7ae-4f64-a20c-dd5e837defab" />
 
 **Opcional**
@@ -42,8 +42,8 @@
 
 **Pontos pessoais**
 
-  Decisões Técnicas - O armazenamento e processamento em nuvem foram escolhidos por oferecerem segurança adequada e maior capacidade computacional para o fluxo de dados. O fluxo foi desenvolvido como um exemplo prático, demonstrando o processo e a resposta esperada. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo operações de I/O e custos de processamento. Não utilizei Docker por entender que todo o fluxo fictício pode ser executado exclusivamente pelo Databricks. Porém, para escalabilidade, Docker poderia ser uma alternativa interessante, pois garantiria maior estabilidade ao processo.
+  Decisões Técnicas - O processamento em nuvem foram escolhidos por oferecer segurança adequada e maior capacidade computacional para o processo como um todo. O fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo operações de I/O e custos de processamento. A plataforma Docker não foi utilizada, pois o Databricks tem tudo que é necessário para atender a demanda apresentada na escala encontrada. Contudo em uma escala maior, o Docker pode ser uma alternativa interessante, pois garantiria maior estabilidade ao processo.
 
-  Dificuldades - A configuração dos bancos de dados apresentou desafios. Inicialmente, foram tentados servidores locais (localhost), mas essa abordagem não funcionou, pois o Databricks não se conecta a IPs locais. Assim, optou-se por bancos em nuvem via RDS AWS para PostgreSQL e Atlas para MongoDB.
+  Dificuldades - A configuração dos bancos de dados apresentou alguns desafios. Inicialmente, foram tentados servidores locais (localhost), mas essa abordagem não funcionou, pois o Databricks não se conecta a IPs locais. Neste caso a solução foi a utilização de bancos em nuvem via RDS AWS para PostgreSQL e Atlas para MongoDB.
 
-  Pontos de melhoria - Desenvolver uma documentação clara é sempre um desafio, pois precisa fazer sentido para quem vai consumir e manter o projeto. Por isso, melhorar a documentação para facilitar a compreensão e manutenção futura é uma grande oportunidade de evolução.
+  Pontos de melhoria - Desenvolver uma documentação clara é sempre um desafio, pois precisa fazer sentido para quem vai consumir e ou manter o projeto. Orientando assim o consumodor em casos de necessidade. Por isso, melhorar a documentação para facilitar a compreensão e manutenção futura é uma grande oportunidade de evolução.
