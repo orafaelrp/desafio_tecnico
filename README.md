@@ -1,8 +1,9 @@
-<ins>**Desafio Técnico - Engenheiro SR**</ins>
+------------------------------------------------------- <ins>**Desafio Técnico**</ins> -------------------------------------------------------
 
-**Descrição**
 
-  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo do processo. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento. 
+<ins>**Descrição**</ins>
+
+  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. 
 
 <ins>**Pré-requisitos - Plataformas**</ins>
 
@@ -37,7 +38,6 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   <img width="1870" height="885" alt="image" src="https://github.com/user-attachments/assets/57c7f250-94e4-4a6b-a3d3-82f4c647ed2e" />
 
 
-  
 <ins>**Ordem de execução**</ins>
 
 
@@ -47,22 +47,21 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   Tempo médio de processamento: 2 minutos
 
 
-**Contato**
+
+<ins>**Contato**</ins>
 
   Em caso de dúvidas ou contribuições para o projeto, entre em contato pelo e-mail orafaelrp@gmail.com.
 
-                               
-------------------------------------------------------- **Pontos pessoais** -------------------------------------------------------
-
+------------------------------------------------------- <ins>**Pontos pessoais**</ins> -------------------------------------------------------
           
-<ins>**Decisões técnicas realizadas**</ins>
+<ins>**Decisões técnicas - ações realizadas**</ins>
   - Plataformas: O processamento em nuvem foi escolhido por oferecer segurança adequada e maior capacidade computacional para o processo como um todo. Para isso o banco relacional escolhido foi o Postgres/RDS AWS e para não relacional foi o Atlas MongoDB. Já o tratamento dos dados foi realizado via notebook Databricks com linguagem Python e SQL.
   
   - Segurança da informação: Fazendo uso das features já desenvolvidas pelo Databricks, todos os dados de login e senha usados para conectar aos bancos de dados foram criados, armazenados e acessados diretamente pelo recurso Secrets do Databricks. Dessa forma, o processo simulou um fluxo de trabalho real, permitindo a utilização dos dados sem comprometer a segurança ou liberar acessos indevidos ao banco. Assim, foi garantido uma maior proteção e qualidade, tanto dos dados quanto do acesso às informações. Para acessar os dados de acesso e conexão com os bancos informados no processo, segue comando abaixo.
 
         %run /Workspace/Users/orafaelrp@gmail.com/desafio_tecnico/secrets_databricks
 
-<ins>**Decisões técnicas não realizadas**</ins>
+<ins>**Decisões técnicas - ações não realizadas**</ins>
   - Controle de versionamento: Nenhum controle manual de versionamento foi feito, pois o Databricks oferece essa solução pronta e escalável dentro da própria plataforma. Tudo ocorre automaticamente, sem a ativação de uma flag ou mesmo sem a intervenção humana. Todas as versões já escritas estão disponíveis em sistema. É apenas necessário informar qual versão se deseja consultar ao final da query, conforme o exemplo abaixo.
 
         SELECT * FROM dados_fake.asso_conta_movi VERSION AS OF 12
@@ -77,10 +76,12 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   - Configuração de ambiente: A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
 
 <ins>**Pontos de melhoria**</ins>
-  - Documentação: Criar uma documentação clara e direta nunca é fácil, mas é fundamental. Ela precisa realmente ajudar quem vai usar ou cuidar do projeto, guiando a pessoa tanto em momentos de manutenção quanto na solução de problemas. Por isso, investir em tornar a documentação mais simples e acessível é uma chance valiosa para garantir que o projeto evolua e se mantenha forte no futuro. Sendo assim, melhorar a documentação para facilitar a compreensão e manutenção futura é uma grande ponto de melhoria.
+  - Documentação: Fazer uma documentação clara e objetiva nunca é tarefa simples, mas é essencial para o sucesso de qualquer projeto. Por isso, dedicar tempo para deixá-la mais fácil de entender é uma oportunidade importante para garantir que o projeto continue evoluindo e sendo útil no futuro. Considerando tudo que abordamos neste README, essa não poderia ser uma exceção. Melhorar a documentação para facilitar a compreensão e a manutenção é um ponto que podemos aprimorar bastante.
 
-  - Governança dos dados: Necessário alinhar quem vai governar os dados neste cenário. Quem vai validar os testes unitários, garantindo a qualidade dos mesmos. Também é necessário um contato respons´vel pelo objeto com data steward para responder em caso erro no prcessamento. Por óbvio, o contato do engenheiro responsável pela criação do objeto foi informado no job de execução. 
+  - Fluxo de processo: Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo do processo. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento.
 
 <ins>**Opcional**</ins>
-
   - Power BI: Para uma entrega mais assertiva de um dashboard, é necessária uma agenda de alinhamento para entender as demandas da área de negócios, incluindo o alinhamento dos dados propostos e recebidos. De todo modo, um protótipo foi desenvolvido fazendo consumo dos dados trabalhados neste projeto.
+
+
+
