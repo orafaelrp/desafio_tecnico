@@ -52,7 +52,7 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   Em caso de dúvidas ou contribuições para o projeto, entre em contato pelo e-mail orafaelrp@gmail.com.
 
                                
----------------------------------------------------------- **Pontos pessoais** ----------------------------------------------------------
+------------------------------------------------------- **Pontos pessoais** -------------------------------------------------------
 
           
 <ins>**Decisões técnicas realizadas**</ins>
