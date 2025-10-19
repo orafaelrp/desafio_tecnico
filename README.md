@@ -2,7 +2,7 @@
 
 **Descrição**
 
-  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo do processo. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o numero de operações de I/O e custos de processamento. 
+  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo do processo. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento. 
 
 <ins>**Pré-requisitos - Plataformas**</ins>
 
@@ -26,7 +26,7 @@
 
 <ins>**Fluxo de execução**</ins>
 
-  O pipeline é acionado automaticamente mediante detecção de novos arquivos fictícios no diretório montado '/Volumes/workspace/default/desafio_tecnico/'. O job ‘job_desafio_tecnico’ inicia a ingestão dos dados oriundos dos bancos relacional Postgres e MongoDB por meio de conectores específicos. Durante o processamento, aplica-se mascaramento nas colunas classificada como sensíveis(cpf/cnpj, email, numero do cartão), seguido pela realização de uma operação de left join entre a tabela MOVIMENTO e as outras bases. Após a coluna UNIQUE_ID recebe colunas especificas que geram a unicidade dos dados apresentados, sofrendo anonimização via função hash MD5 para garantir a irreversibilidade dos dados. O dataset resultante é submetido a um conjunto estruturado de testes unitários automatizados que validam integridade referencial. Uma vez aprovado, os dados são persistidos em uma tabela Delta Lake denominada "dados_fake.asso_conta_movi". Depois o objeto é armazenado nos formatos Delta e Parquet no path físico '/Volumes/workspace/default/desafio_tecnico'.
+  O pipeline é acionado automaticamente mediante detecção de novos arquivos fictícios no diretório montado '/Volumes/workspace/default/desafio_tecnico/'. O job ‘job_desafio_tecnico’ inicia a ingestão dos dados oriundos dos bancos relacional Postgres e MongoDB por meio de conectores específicos. Durante o processamento, aplica-se mascaramento nas colunas classificada como sensíveis(cpf/cnpj, email, número do cartão), seguido pela realização de uma operação de left join entre a tabela MOVIMENTO e as outras bases. Após a coluna UNIQUE_ID recebe colunas especificas que geram a unicidade dos dados apresentados, sofrendo anonimização via função hash MD5 para garantir a irreversibilidade dos dados. O dataset resultante é submetido a um conjunto estruturado de testes unitários automatizados que validam integridade referencial. Uma vez aprovado, os dados são persistidos em uma tabela Delta Lake denominada "dados_fake.asso_conta_movi". Depois o objeto é armazenado nos formatos Delta e Parquet no path físico '/Volumes/workspace/default/desafio_tecnico'.
 
   - Job name: job_desafio_tecnico
   - Job ID: 208694950806642
@@ -46,11 +46,6 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
 
   Tempo médio de processamento: 2 minutos
 
-  
-
-<ins>**Opcional**</ins>
-
-  Power BI - Para uma entrega mais assertiva de um dashboard, é necessária uma agenda de alinhamento para entender as demandas da área de negócios, incluindo o alinhamento dos dados propostos e recebidos. De todo modo, um protótipo foi desenvolvido fazendo consumo dos dados trabalhados neste projeto.
 
 **Contato**
 
@@ -61,9 +56,9 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
 
           
 <ins>**Decisões técnicas realizadas**</ins>
-  - Plataformas: O processamento em nuvem foi escolhido por oferecer segurança adequada e maior capacidade computacional para o processo como um todo. Para isso o banco relacional escolhido foi o PostGres/RDS AWS e para não relacional foi o Atlas MongoDB. Já o tratamento dos dados foi realizado via notebook Databricks com linguagem Python e SQL.
+  - Plataformas: O processamento em nuvem foi escolhido por oferecer segurança adequada e maior capacidade computacional para o processo como um todo. Para isso o banco relacional escolhido foi o Postgres/RDS AWS e para não relacional foi o Atlas MongoDB. Já o tratamento dos dados foi realizado via notebook Databricks com linguagem Python e SQL.
   
-  - Segurança da informação: Fazendo uso das features já desenvolvidas pelo Databricks, todos os dados de login e senha usados para conectar aos bancos de dados foram criados, armazenados e acessados diretamente pelo recurso Secrets do Databricks. Dessa forma, o processo simulou um fluxo de trabalho real, permitindo a utilização os dados sem comprometer a segurança ou liberar acessos indevidos ao banco. Assim, foi garantido uma maior proteção e qualidade, tanto dos dados quanto do acesso às informações. Para acessar os dados de acesso e conexão com os bancos informados no processo, segue comando abaixo.
+  - Segurança da informação: Fazendo uso das features já desenvolvidas pelo Databricks, todos os dados de login e senha usados para conectar aos bancos de dados foram criados, armazenados e acessados diretamente pelo recurso Secrets do Databricks. Dessa forma, o processo simulou um fluxo de trabalho real, permitindo a utilização dos dados sem comprometer a segurança ou liberar acessos indevidos ao banco. Assim, foi garantido uma maior proteção e qualidade, tanto dos dados quanto do acesso às informações. Para acessar os dados de acesso e conexão com os bancos informados no processo, segue comando abaixo.
 
         %run /Workspace/Users/orafaelrp@gmail.com/desafio_tecnico/secrets_databricks
 
@@ -79,9 +74,13 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   - Docker: A plataforma Docker não foi utilizada, pois o Databricks já conta com diversas features﻿ testadas e validadas pelo mercado. Dessa forma, para este projeto e nesta escala, a plataforma tem tudo o que é necessário para atender à demanda identificada. Porém, em uma escala maior, o Docker pode ser uma alternativa interessante, já que garantiria maior estabilidade ao processo como um todo.
   
 <ins>**Dificuldades**</ins>
-  - Configuração de ambiente: - A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
+  - Configuração de ambiente: A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
 
 <ins>**Pontos de melhoria**</ins>
   - Documentação: Criar uma documentação clara e direta nunca é fácil, mas é fundamental. Ela precisa realmente ajudar quem vai usar ou cuidar do projeto, guiando a pessoa tanto em momentos de manutenção quanto na solução de problemas. Por isso, investir em tornar a documentação mais simples e acessível é uma chance valiosa para garantir que o projeto evolua e se mantenha forte no futuro. Sendo assim, melhorar a documentação para facilitar a compreensão e manutenção futura é uma grande ponto de melhoria.
 
-  - Governança dos dados: necessário alinhar quem vai governar os dados neste cenário. Quem vai validar os testes unitarios, garantindo a qualidade dos mesmos. Também é necessário um contato respons´vel pelo objeto com data steard para resposnder em caso erro no prcessamento. Por óbivio, o contato do engenheiro responsável pela criação do objeto foi informando no job de execução. 
+  - Governança dos dados: Necessário alinhar quem vai governar os dados neste cenário. Quem vai validar os testes unitários, garantindo a qualidade dos mesmos. Também é necessário um contato respons´vel pelo objeto com data steward para responder em caso erro no prcessamento. Por óbvio, o contato do engenheiro responsável pela criação do objeto foi informado no job de execução. 
+
+<ins>**Opcional**</ins>
+
+  - Power BI: Para uma entrega mais assertiva de um dashboard, é necessária uma agenda de alinhamento para entender as demandas da área de negócios, incluindo o alinhamento dos dados propostos e recebidos. De todo modo, um protótipo foi desenvolvido fazendo consumo dos dados trabalhados neste projeto.
