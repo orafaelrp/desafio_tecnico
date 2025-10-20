@@ -3,7 +3,7 @@
 
 <ins>**Descrição**</ins>
 
-  Este projeto foi criado para atender a uma demanda técnica fictícia da cooperativa SiCooperative LTDA. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos Delta e Parquet. 
+  Este projeto foi criado para atender a uma demanda técnica fictícia. Neste casso a cooperativa fantasia chamada SiCooperative LTDA necessita de um pipeline de dados para gerar valor junto as áreas de negócio. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos CSV, Delta e Parquet. 
 
 <ins>**Pré-requisitos - Plataformas**</ins>
 
@@ -44,7 +44,7 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   <img width="864" height="224" alt="image" src="https://github.com/user-attachments/assets/6fab9180-f7ae-4f64-a20c-dd5e837defab" />
 
 
-  Tempo médio de processamento: 2 minutos
+  Tempo médio de processamento: 2 a 3 minutos
 
 
 
@@ -76,12 +76,9 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   - Configuração de ambiente: A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
 
 <ins>**Pontos de melhoria**</ins>
-  - Documentação: Fazer uma documentação clara e objetiva nunca é tarefa simples, mas é essencial para o sucesso de qualquer projeto. Por isso, dedicar tempo para deixá-la mais fácil de entender é uma oportunidade importante para garantir que o projeto continue evoluindo e sendo útil no futuro. Considerando tudo que abordamos neste README, essa não poderia ser uma exceção. Melhorar a documentação para facilitar a compreensão e a manutenção é um ponto que podemos aprimorar bastante.
+  - Documentação: Fazer uma documentação clara e objetiva nunca é tarefa simples, mas é essencial para o sucesso de qualquer projeto. Por isso, dedicar tempo para deixá-la mais fácil de entender é uma oportunidade importante para garantir que o projeto continue evoluindo e sendo útil no futuro. Considerando tudo que foi abordado neste README, essa não poderia ser uma exceção. Melhorar a documentação para facilitar a compreensão e a manutenção é um ponto de meloria.
 
-  - Fluxo de processo: Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo do processo. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento.
+  - Fluxo de processo: Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo executado. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento.
 
 <ins>**Opcional**</ins>
   - Power BI: Para uma entrega mais assertiva de um dashboard, é necessária uma agenda de alinhamento para entender as demandas da área de negócios, incluindo o alinhamento dos dados propostos e recebidos. De todo modo, um protótipo foi desenvolvido fazendo consumo dos dados trabalhados neste projeto.
-
-
-
