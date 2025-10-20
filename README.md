@@ -4,17 +4,26 @@
 
   Este projeto foi criado para atender a uma demanda técnica fictícia. Neste caso, a cooperativa fictícia chamada SiCooperative LTDA necessita de um pipeline de dados para gerar valor junto às áreas de negócio. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos CSV, Delta e Parquet. 
 
+&nbsp;
+
+
 <ins>**Pré-requisitos - Plataformas**</ins>
 
-  - GitHub privado - Permissão de acesso para leitura e escrita: https://github.com/orafaelrp/desafio_tecnico.git
+  - GitHub privado - Permissão de acesso para leitura e escrita
 
-  - Databricks - Acesso ao workspace de produção: /Workspace/Users/orafaelrp@gmail.com/desafio_tecnico
+  - Databricks - Acesso ao workspace de produção
+
+&nbsp;
+
 
 <ins>**Pré-requisitos - Linguagens**
 
   - Python (pandas, random, faker, datetime, pymongo, psycopg2, pyspark.sql.types, pyspark.sql.functions)
 
   - SQL
+
+&nbsp;
+
 
 <ins>**Funcionalidades**</ins>
 
@@ -24,14 +33,14 @@
 
   - Exportação dos dados validados
 
+&nbsp;
+
+
 <ins>**Fluxo de execução**</ins>
 
   O pipeline é acionado automaticamente mediante detecção de novos arquivos fictícios no diretório montado '/Volumes/workspace/default/desafio_tecnico/'. O job ‘job_desafio_tecnico’ inicia a ingestão dos dados oriundos dos bancos relacional Postgres e MongoDB por meio de conectores específicos. Durante o processamento, aplica-se mascaramento nas colunas classificada como sensíveis(cpf/cnpj, email, número do cartão), seguido pela realização de uma operação de left join entre a tabela MOVIMENTO e as outras bases. Após a coluna UNIQUE_ID recebe colunas especificas que geram a unicidade dos dados apresentados, sofrendo anonimização via função hash MD5 para garantir a irreversibilidade dos dados. O dataset resultante é submetido a um conjunto estruturado de testes unitários automatizados que validam integridade referencial. Uma vez aprovado, os dados são persistidos em uma tabela Delta Lake denominada "dados_fake.asso_conta_movi". Depois o objeto é armazenado nos formatos Delta e Parquet no path físico '/Volumes/workspace/default/desafio_tecnico'.
 
-  - Job name: job_desafio_tecnico
-  - Job ID: 208694950806642
-  - Job link: https://dbc-4f2eb8a6-531b.cloud.databricks.com/jobs/208694950806642?o=2243053869670813
-
+    
 Para realizar uma atualização manual, basta clicar no botão azul no canto superior direito. O job já está configurado para rodar automaticamente, exigindo intervenção apenas nesse momento, quando for necessário uma atualização antes do ciclo programado.
 
   <img width="1870" height="885" alt="image" src="https://github.com/user-attachments/assets/57c7f250-94e4-4a6b-a3d3-82f4c647ed2e" />
@@ -50,6 +59,55 @@ Para realizar uma atualização manual, basta clicar no botão azul no canto sup
 
 
 &nbsp;
+
+
+<ins>**Códigos e estruturas**</ins>
+
+**Estrutura do processo**
+  
+home/  
+├──  desafio_tecnico/  
+│   ├──  dados_criacao                 --> Cria dados simulados para inserção em bancos, notebook que faz o gatilho do job  
+│   ├──  dados_ingestao                --> Lê os dados dos arquivos no path volume e insere os dados no bancos MOngo e Postgres  
+│   ├──  dados_extracao_tratamento     --> Obtem dados dos bancos, mascara as bases, unifica o objeto, valida e exporta se aprovado  
+│   ├──  README.md                     --> Guia de projeto que explica seu propósito e como usá-lo  
+│   ├──  secrets_databricks            --> Comando que cria o secretas com as senhas ocultas dentro do Databricks  
+  
+**Estrutura dos testes unitários**
+       
+├──  Valida se o objeto existe  
+│   ├──  Verifica se a coluna ID_PK tem valores nulos  
+│   │   ├── Verifica se a coluna VLR_TRANSACAO é tipo texto  
+│   │   │   ├── Verifica se a coluna VLR_TRANSACAO tem valores negativos  
+│   │   │   │   ├── Verifica se a coluna DT_TRANSACAO tem data futura  
+│   │   │   │   │   ├── Verifica se a coluna EMAIL contém @ em todas as linhas  
+│   │   │   │   │   │   ├── Verifica se a tabela tem unicidade mediante a coluna UNIQUE_ID      
+
+Caso seja necessário inserir um novo teste unitário, segue exemplo abaixo:
+
+    
+    ## EXMPLO DE VERIFICACAO SE EXISTE DATA FUTURA EM DETERMINADA COLUNA DA TABELA
+    teste_status = "TABELA COM DATA FUTURA"
+    df_transacoes_futuras = spark.sql("""
+        SELECT COUNT(*) AS transacoes_futuras
+        FROM ASSO_CONTA_MOVI
+        WHERE TO_DATE(dt_transacao) > CURRENT_DATE()
+    """)
+    if df_transacoes_futuras.collect()[0]["transacoes_futuras"] > 0:
+        raise Exception()  
+
+&nbsp;
+<ins>**Links úteis**</ins>
+  - GitHub privado - https://github.com/orafaelrp/desafio_tecnico.git
+  - Mongo DB Atlas - https://cloud.mongodb.com/v2/68efdc7fc3401e1005c111c5#/clusters
+  - PostGres Aurora RDS - https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1#database:id=database-1;is-cluster=false
+  - Databricks Workspace - https://dbc-4f2eb8a6-531b.cloud.databricks.com/browse/folders/3888643003032035?o=2243053869670813
+  - Job link - https://dbc-4f2eb8a6-531b.cloud.databricks.com/jobs/208694950806642?o=2243053869670813
+
+ 
+&nbsp;
+
+ 
 <ins>**Contato**</ins>
 
   Em caso de dúvidas ou contribuições para o projeto, entre em contato pelo e-mail orafaelrp@gmail.com.
@@ -75,6 +133,7 @@ Para realizar uma atualização manual, basta clicar no botão azul no canto sup
 
   - Logs de qualidade: Não foram criados logs de qualidade nesta versão, pois ainda existe a chance de entregar dados com risco de baixa qualidade ou até mesmo com erro. Do ponto de vista da engenharia, foi preferível entregar o dado apenas em sua total qualidade. Nesse sentido, a tabela apenas é criada se o dado for completamente aprovado nos testes unitários. Contudo esse filtro pode ser ajustado conforme a necessidade. E este for o caso, permitir o nascimento da tabela ainda que com alguns pontos de atenção aceitáveis, uma tabela auxiliar informando a qualidade deste ou de mais objetos deve ser criada em um schema interno para controle de qualidade e governança.
 
+   
   - Docker: A plataforma Docker não foi utilizada, pois o Databricks já conta com diversas features﻿ testadas e validadas pelo mercado. Dessa forma, para este projeto e nesta escala, a plataforma tem tudo o que é necessário para atender à demanda identificada. Porém, em uma escala maior, o Docker pode ser uma alternativa interessante, já que garantiria maior estabilidade ao processo como um todo.
 
 
@@ -91,6 +150,9 @@ Para realizar uma atualização manual, basta clicar no botão azul no canto sup
   - Fluxo de processo: Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo executado. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento.
     
   - Framework SiCooperative: Diante da demanda por processamento distribuído, qualidade dos dados e segurança da informação, poderia ser desenvolvido um framework de trabalho para atender esses pontos. Conexões a bancos, gerenciamento de senhas e testes unitários poderiam coexistir facilmente em uma única funcionalidade. Assim, esse comando poderia ser importado facilmente em qualquer notebook que necessitasse dessas tarefas.
+
+&nbsp;
+
 
 <ins>**Opcional**</ins>
   - Power BI: Para uma entrega mais assertiva de um dashboard, é necessária uma agenda de alinhamento para entender as demandas da área de negócios, incluindo o alinhamento dos dados propostos e requisitos tecnicos patra essa entrega. De todo modo, um protótipo foi desenvolvido fazendo consumo dos dados trabalhados neste projeto.
