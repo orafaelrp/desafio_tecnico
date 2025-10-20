@@ -1,5 +1,4 @@
-------------------------------------------------------- <ins>**Desafio Técnico**</ins> -------------------------------------------------------
-
+ ## **Desafio Técnico**
 
 <ins>**Descrição**</ins>
 
@@ -33,9 +32,12 @@
   - Job ID: 208694950806642
   - Job link: https://dbc-4f2eb8a6-531b.cloud.databricks.com/jobs/208694950806642?o=2243053869670813
 
-Para casos de atualização manual, apenas é necessário o clique do botão azul no canto superior direito. O job está parametrizado para executar todo o processo de forma automática.
+Para realizar uma atualização manual, basta clicar no botão azul no canto superior direito. O job já está configurado para rodar automaticamente, exigindo intervenção apenas nesse momento, quando for necessário uma atualização antes do ciclo programado.
 
   <img width="1870" height="885" alt="image" src="https://github.com/user-attachments/assets/57c7f250-94e4-4a6b-a3d3-82f4c647ed2e" />
+
+
+&nbsp;
 
 
 <ins>**Ordem de execução**</ins>
@@ -47,21 +49,24 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   Tempo médio de processamento: 2 a 3 minutos
 
 
-
+&nbsp;
 <ins>**Contato**</ins>
 
   Em caso de dúvidas ou contribuições para o projeto, entre em contato pelo e-mail orafaelrp@gmail.com.
 
-------------------------------------------------------- <ins>**Pontos pessoais**</ins> -------------------------------------------------------
-          
-<ins>**Decisões técnicas - ações realizadas**</ins>
+
+&nbsp;
+
+
+## **Decisões técnicas**   
+<ins>**Ações realizadas**</ins>
   - Plataformas: O processamento em nuvem foi escolhido por oferecer segurança adequada e maior capacidade computacional para o processo como um todo. Para isso o banco relacional escolhido foi o Postgres/RDS AWS e para não relacional foi o Atlas MongoDB. Já o tratamento dos dados foi realizado via notebook Databricks com linguagem Python e SQL.
   
   - Segurança da informação: Fazendo uso das features já desenvolvidas pelo Databricks, todos os dados de login e senha usados para conectar aos bancos de dados foram criados, armazenados e acessados diretamente pelo recurso Secrets do Databricks. Dessa forma, o processo simulou um fluxo de trabalho real, permitindo a utilização dos dados sem comprometer a segurança ou liberar acessos indevidos ao banco. Assim, foi garantido uma maior proteção e qualidade, tanto dos dados quanto do acesso às informações. Para acessar os dados de acesso e conexão com os bancos informados no processo, segue comando abaixo.
 
         %run /Workspace/Users/orafaelrp@gmail.com/desafio_tecnico/secrets_databricks
 
-<ins>**Decisões técnicas - ações não realizadas**</ins>
+<ins>**Ações não realizadas**</ins>
   - Controle de versionamento: Nenhum controle manual de versionamento foi feito, pois o Databricks oferece essa solução pronta e escalável dentro da própria plataforma. Tudo ocorre automaticamente, sem a ativação de uma flag ou mesmo sem a intervenção humana. Todas as versões já escritas estão disponíveis em sistema. É apenas necessário informar qual versão se deseja consultar ao final da query, conforme o exemplo abaixo.
 
         SELECT * FROM dados_fake.asso_conta_movi VERSION AS OF 12
@@ -71,7 +76,12 @@ Para casos de atualização manual, apenas é necessário o clique do botão azu
   - Logs de qualidade: Não foram criados logs de qualidade nesta versão, pois ainda existe a chance de entregar dados com risco de baixa qualidade ou até mesmo com erro. Do ponto de vista da engenharia, foi preferível entregar o dado apenas em sua total qualidade. Nesse sentido, a tabela apenas é criada se o dado for completamente aprovado nos testes unitários. Contudo esse filtro pode ser ajustado conforme a necessidade. E este for o caso, permitir o nascimento da tabela ainda que com alguns pontos de atenção aceitáveis, uma tabela auxiliar informando a qualidade deste ou de mais objetos deve ser criada em um schema interno para controle de qualidade e governança.
 
   - Docker: A plataforma Docker não foi utilizada, pois o Databricks já conta com diversas features﻿ testadas e validadas pelo mercado. Dessa forma, para este projeto e nesta escala, a plataforma tem tudo o que é necessário para atender à demanda identificada. Porém, em uma escala maior, o Docker pode ser uma alternativa interessante, já que garantiria maior estabilidade ao processo como um todo.
-  
+
+
+&nbsp;
+
+
+## **Pontos pessoais**
 <ins>**Dificuldades**</ins>
   - Configuração de ambiente: A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
 
