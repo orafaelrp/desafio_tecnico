@@ -3,27 +3,28 @@
 <ins>**Descrição**</ins>
 
   Este projeto foi criado para atender a uma demanda técnica fictícia. Neste caso, a cooperativa fictícia chamada SiCooperative LTDA necessita de um pipeline de dados para gerar valor junto às áreas de negócio. Para isso, foram gerados dados simulados para as tabelas ASSOCIADO, CONTA e MOVIMENTO, que foram inseridos em bancos de dados relacionais e não relacionais. Uma vez que o ambiente está previamente configurado, é feita a extração dos dados, seguido pelo tratamento, mascaramento e o cruzamento das bases para formar o conjunto final. Esse conjunto é então submetido a testes unitários para garantir sua qualidade. Após a validação, o resultado é gravado em formato Delta no Lake e exportado para um diretório específico nos formatos CSV, Delta e Parquet. 
+  
 
 &nbsp;
 
 
-<ins>**Pré-requisitos - Plataformas**</ins>
+## <ins>**Pré-requisitos**</ins>
 
-  - GitHub privado - Permissão de acesso para leitura e escrita
+<ins>**Plataformas**</ins> 
+ - GitHub privado - Permissão de acesso para leitura e escrita  
+ - Databricks - Acesso ao workspace de produção  
+ 
+  
+&nbsp;
 
-  - Databricks - Acesso ao workspace de produção
+      
+<ins>**Linguagens**</ins>  
+ - Python (pandas, random, faker, datetime, pymongo, psycopg2, pyspark.sql.types, pyspark.sql.functions)  
+ - SQL  
 
 &nbsp;
 
-
-<ins>**Pré-requisitos - Linguagens**
-
-  - Python (pandas, random, faker, datetime, pymongo, psycopg2, pyspark.sql.types, pyspark.sql.functions)
-
-  - SQL
-
-&nbsp;
-
+## <ins>**Especificações técnicas**</ins>  
 
 <ins>**Funcionalidades**</ins>
 
@@ -40,9 +41,13 @@
 
   O pipeline é acionado automaticamente mediante detecção de novos arquivos fictícios no diretório montado '/Volumes/workspace/default/desafio_tecnico/'. O job ‘job_desafio_tecnico’ inicia a ingestão dos dados oriundos dos bancos relacional Postgres e MongoDB por meio de conectores específicos. Durante o processamento, aplica-se mascaramento nas colunas classificada como sensíveis(cpf/cnpj, email, número do cartão), seguido pela realização de uma operação de left join entre a tabela MOVIMENTO e as outras bases. Após a coluna UNIQUE_ID recebe colunas especificas que geram a unicidade dos dados apresentados, sofrendo anonimização via função hash MD5 para garantir a irreversibilidade dos dados. O dataset resultante é submetido a um conjunto estruturado de testes unitários automatizados que validam integridade referencial. Uma vez aprovado, os dados são persistidos em uma tabela Delta Lake denominada "dados_fake.asso_conta_movi". Depois o objeto é armazenado nos formatos Delta e Parquet no path físico '/Volumes/workspace/default/desafio_tecnico'.
 
-    
-Para realizar uma atualização manual, basta clicar no botão azul no canto superior direito. O job já está configurado para rodar automaticamente, exigindo intervenção apenas nesse momento, quando for necessário uma atualização antes do ciclo programado.
+&nbsp;
 
+
+<ins>**Atualização manual**</ins>
+
+Para realizar uma atualização manual, basta clicar no botão azul no canto superior direito. O job já está configurado para rodar automaticamente, exigindo intervenção apenas nesse momento, quando for necessário uma atualização antes do ciclo programado.
+  
   <img width="1870" height="885" alt="image" src="https://github.com/user-attachments/assets/57c7f250-94e4-4a6b-a3d3-82f4c647ed2e" />
 
 
@@ -61,7 +66,7 @@ Para realizar uma atualização manual, basta clicar no botão azul no canto sup
 &nbsp;
 
 
-<ins>**Códigos e estruturas**</ins>
+<ins>**Estruturas e Códigos**</ins>
 
 **Estrutura do processo**
   
@@ -72,7 +77,11 @@ home/
 │   ├──  dados_extracao_tratamento     --> Obtem dados dos bancos, mascara as bases, unifica o objeto, valida e exporta se aprovado  
 │   ├──  README.md                     --> Guia de projeto que explica seu propósito e como usá-lo  
 │   ├──  secrets_databricks            --> Comando que cria o secretas com as senhas ocultas dentro do Databricks  
-  
+
+
+&nbsp;
+
+
 **Estrutura dos testes unitários**
        
 ├──  Valida se o objeto existe  
@@ -82,6 +91,10 @@ home/
 │   │   │   │   ├── Verifica se a coluna DT_TRANSACAO tem data futura  
 │   │   │   │   │   ├── Verifica se a coluna EMAIL contém @ em todas as linhas  
 │   │   │   │   │   │   ├── Verifica se a tabela tem unicidade mediante a coluna UNIQUE_ID      
+
+
+&nbsp;
+
 
 Caso seja necessário inserir um novo teste unitário, segue exemplo abaixo:
 
@@ -96,7 +109,26 @@ Caso seja necessário inserir um novo teste unitário, segue exemplo abaixo:
     if df_transacoes_futuras.collect()[0]["transacoes_futuras"] > 0:
         raise Exception()  
 
+
 &nbsp;
+
+
+**Dados de acesso aos bancos**
+
+ - Postgres
+
+       postgres_user = dbutils.secrets.get(scope="db_secrets", key="postgres_user")
+       postgres_password = dbutils.secrets.get(scope="db_secrets", key="postgres_password")
+   
+- Mongo Atlas
+  
+       mongo_user = dbutils.secrets.get(scope="db_secrets", key="mongo_user")
+       mongo_password = dbutils.secrets.get(scope="db_secrets", key="mongo_password")  
+
+
+&nbsp;
+
+
 <ins>**Links úteis**</ins>
   - GitHub privado - https://github.com/orafaelrp/desafio_tecnico.git
   - Mongo DB Atlas - https://cloud.mongodb.com/v2/68efdc7fc3401e1005c111c5#/clusters
@@ -124,6 +156,10 @@ Caso seja necessário inserir um novo teste unitário, segue exemplo abaixo:
 
         %run /Workspace/Users/orafaelrp@gmail.com/desafio_tecnico/secrets_databricks
 
+
+&nbsp;
+
+
 <ins>**Ações não realizadas**</ins>
   - Controle de versionamento: Nenhum controle manual de versionamento foi feito, pois o Databricks oferece essa solução pronta e escalável dentro da própria plataforma. Tudo ocorre automaticamente, sem a ativação de uma flag ou mesmo sem a intervenção humana. Todas as versões já escritas estão disponíveis em sistema. É apenas necessário informar qual versão se deseja consultar ao final da query, conforme o exemplo abaixo.
 
@@ -144,12 +180,17 @@ Caso seja necessário inserir um novo teste unitário, segue exemplo abaixo:
 <ins>**Dificuldades**</ins>
   - Configuração de ambiente: A configuração dos bancos de dados apresentou alguns desafios. No início, foram testados servidores locais (localhost), mas essa abordagem não funcionou porque o Databricks não se conecta a IPs locais sem tunelamento ou VPN. Essas soluções foram substituídas pelo processamento em nuvem. Pois a antiga abordagem envolveria custos no processo e certa complexidade na configuração. Levando ainda em consideração que devido ao prazo informado, talvez não fizesse sentido neste momento.
 
+
+&nbsp;
+
+
 <ins>**Pontos de melhoria**</ins>
   - Documentação README: Fazer uma documentação clara e objetiva nunca é tarefa simples, mas é essencial para o sucesso de qualquer projeto. Por isso, é importante dedicar tempo para deixá-la mais concisa e completa, garantindo assom que o projeto continue evoluindo e sendo útil no futuro. Considerando tudo que foi abordado neste README, essa não poderia ser uma exceção. Melhorar a documentação para facilitar a compreensão e a manutenção é um ponto de meloria.
 
   - Fluxo de processo: Este fluxo foi desenvolvido como um exemplo prático, demonstrando o processo em si e a resposta obtida a cada passo executado. Em um cenário real, vários pontos seriam otimizados para melhor desempenho e menor consumo computacional, reduzindo o número de operações de I/O e custos de processamento.
     
   - Framework SiCooperative: Diante da demanda por processamento distribuído, qualidade dos dados e segurança da informação, poderia ser desenvolvido um framework de trabalho para atender esses pontos. Conexões a bancos, gerenciamento de senhas e testes unitários poderiam coexistir facilmente em uma única funcionalidade. Assim, esse comando poderia ser importado facilmente em qualquer notebook que necessitasse dessas tarefas.
+
 
 &nbsp;
 
